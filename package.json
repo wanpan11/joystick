@@ -1,15 +1,22 @@
 {
-  "name": "joystick",
+  "name": "joystick-kit",
   "version": "1.0.0",
-  "description": "",
+  "description": "🎮 Virtual joystick 虚拟摇杆",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wanpan11/joystick"
+  },
   "scripts": {
     "build": "rollup --config rollup.config.js",
     "test": "node ./test/test.cjs"
   },
   "type": "module",
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "joystick",
+    "虚拟摇杆"
+  ],
+  "author": "wanpan_11",
   "license": "ISC",
   "devDependencies": {
     "@rollup/plugin-typescript": "^9.0.2",
