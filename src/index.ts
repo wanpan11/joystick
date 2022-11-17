@@ -38,13 +38,22 @@ class Joystick {
     build: false
   }
 
+  color = { back: '', front: '' }
+  backImg = { back: '', front: '' }
+
   create = (config: CreateConfig): void => {
-    const { zone = '', size = 80 } = config
+    const { zone = '', size = 80, color, backImg } = config
     const zoneNode = document.getElementById(zone)
 
     if (zone === '' || zoneNode === null) {
       throw new Error('zoneNode is empty!')
     } else {
+      if (color !== undefined) {
+        this.color = color
+      }
+      if (backImg !== undefined) {
+        this.backImg = backImg
+      }
       this.joystickSize = size
       this.initListener(zoneNode)
     }

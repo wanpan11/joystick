@@ -4,7 +4,7 @@ interface Position {
 }
 
 interface StyleObj {
-  [string]: string
+  [key: string]: string
 }
 
 interface EventObj {
@@ -24,13 +24,17 @@ interface JoystickObj {
 
 interface CreateConfig {
   zone: string
-  size: number
+  size?: number
+  color?: { back: string, front: string }
+  backImg?: { back: string, front: string }
 }
 
 interface Joystick {
   joystickSize: number
   callBack: EventObj
   currentJoystick: JoystickObj
+  color: { back: string, front: string }
+  backImg: { back: string, front: string }
   create: (config: CreateConfig) => void
   initListener: (zoneNode: HTMLElement) => void
   move: (e: Event) => void
