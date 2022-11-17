@@ -34,14 +34,16 @@ export const buildDom = (instance: Joystick, zone: HTMLElement): void => {
   currentJoystick.back = back
   currentJoystick.front = front
 
-  ui.setAttribute('className', 'joystick_box')
-  back.setAttribute('className', 'back')
-  front.setAttribute('className', 'front')
+  ui.setAttribute('class', 'joystick_box')
+  back.setAttribute('class', 'back')
+  front.setAttribute('class', 'front')
 
   const uiStyle = {
     position: 'fixed',
     top: `${currentJoystick.y - joystickSize / 2}px`,
-    left: `${currentJoystick.x - joystickSize / 2}px`
+    left: `${currentJoystick.x - joystickSize / 2}px`,
+    opacity: '1',
+    transition: 'opacity 300ms'
   }
   const backStyle = {
     width: `${joystickSize}px`,

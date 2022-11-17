@@ -7,6 +7,12 @@ interface StyleObj {
   [string]: string
 }
 
+interface EventObj {
+  start: null | (() => void)
+  move: null | (() => void)
+  end: null | (() => void)
+}
+
 interface JoystickObj {
   ui: null | HTMLElement
   back: null | HTMLElement
@@ -23,7 +29,17 @@ interface CreateConfig {
 
 interface Joystick {
   joystickSize: number
+  callBack: EventObj
   currentJoystick: JoystickObj
   create: (config: CreateConfig) => void
-  move: (e: MouseEvent) => void
+  initListener: (zoneNode: HTMLElement) => void
+  move: (e: Event) => void
+  destroy: () => void
+  on: (type: string, cb: () => void) => void
 }
+
+interface EventType {
+  start: string
+  move: string
+  end: string
+};

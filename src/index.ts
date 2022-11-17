@@ -1,7 +1,34 @@
 import { distance, radian, findCoord, buildDom } from './util'
 
+/* 区分事件 */
+const isTouch = !!('ontouchstart' in window)
+const events = {
+  touch: {
+    start: 'touchstart',
+    move: 'touchmove',
+    end: 'touchend,touchcancel'
+  },
+  mouse: {
+    start: 'mousedown',
+    move: 'mousemove',
+    end: 'mouseup'
+  }
+}
+let toBind: EventType
+if (isTouch) {
+  toBind = events.touch
+} else {
+  toBind = events.mouse
+}
+
 class Joystick {
   joystickSize = 0
+  callBack: EventObj = {
+    start: null,
+    move: null,
+    end: null
+  }
+
   currentJoystick: JoystickObj = {
     ui: null,
     back: null,
@@ -27,32 +54,52 @@ class Joystick {
     const body = document.getElementsByTagName('body')[0]
 
     /* 监听 */
-    zoneNode.addEventListener('mousedown', e => {
-      const { clientX, clientY } = e
-      this.currentJoystick.x = clientX
-      this.currentJoystick.y = clientY
+    zoneNode.addEventListener(toBind.start, e => {
+      if (e.type === 'touchstart') {
+        const { clientX, clientY } = (e as TouchEvent).changedTouches[0]
+        this.currentJoystick.x = clientX
+        this.currentJoystick.y = clientY
+      } else {
+        const { clientX, clientY } = e as MouseEvent
+        this.currentJoystick.x = clientX
+        this.currentJoystick.y = clientY
+      }
 
       buildDom(this, zoneNode)
 
-      body.addEventListener('mousemove', this.move)
+      body.addEventListener(toBind.move, this.move, { passive: false })
+
+      if (this.callBack.start != null) {
+        this.callBack.start()
+      }
     })
 
-    body.addEventListener('mouseup', () => {
-      body.removeEventListener('mousemove', this.move)
-
-      if (this.currentJoystick.build) {
-        this.currentJoystick.front!.style.transform = 'translate(0px, 0px)'
-        setTimeout(() => {
-          this.currentJoystick.ui!.remove()
-        }, 100)
-      }
+    const endArr = toBind.end.split(',')
+    endArr.forEach(key => {
+      body.addEventListener(key, (e) => {
+        body.removeEventListener(toBind.move, this.move)
+        this.destroy()
+        if (this.callBack.end != null) {
+          this.callBack.end()
+        }
+      })
     })
   }
 
-  move = (e: MouseEvent): void => {
+  move = (e: Event): void => {
     if (!this.currentJoystick.build) return
 
-    const currentPos = { x: e.clientX, y: e.clientY }
+    const currentPos = { x: 0, y: 0 }
+    if (e.type === 'touchmove') {
+      const { clientX, clientY } = (e as TouchEvent).changedTouches[0]
+      currentPos.x = clientX
+      currentPos.y = clientY
+    } else {
+      const { clientX, clientY } = e as MouseEvent
+      currentPos.x = clientX
+      currentPos.y = clientY
+    }
+
     const r = this.currentJoystick.back!.getBoundingClientRect().width / 2
 
     /* 获取斜边长度 */
@@ -66,6 +113,34 @@ class Joystick {
     const clampedPos = findCoord(clampedDist, rad)
 
     this.currentJoystick.front!.style.transform = `translate(${clampedPos.x}px,${clampedPos.y}px)`
+
+    if (this.callBack.move != null) {
+      this.callBack.move()
+    }
+
+    e.preventDefault()
+  }
+
+  destroy = (): void => {
+    if (this.currentJoystick.build) {
+      this.currentJoystick.front!.style.transform = 'translate(0px, 0px)'
+      this.currentJoystick.ui!.style.opacity = '0'
+
+      setTimeout(() => {
+        this.currentJoystick.ui!.remove()
+        this.currentJoystick.build = false
+      }, 400)
+    }
+  }
+
+  on = (type: string, cb: () => void): void => {
+    const keys = Object.keys(this.callBack)
+
+    if (keys.indexOf(type) === -1) {
+      throw new Error('event type error!')
+    } else {
+      this.callBack[type as keyof EventObj] = cb
+    }
   }
 }
 
