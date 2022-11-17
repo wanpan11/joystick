@@ -43,7 +43,7 @@ export const buildDom = (instance: Joystick, zone: HTMLElement): void => {
     top: `${currentJoystick.y - joystickSize / 2}px`,
     left: `${currentJoystick.x - joystickSize / 2}px`,
     opacity: '1',
-    transition: 'opacity 300ms'
+    transition: 'opacity 100ms'
   }
   const backStyle = {
     width: `${joystickSize}px`,

@@ -76,7 +76,7 @@ class Joystick {
 
     const endArr = toBind.end.split(',')
     endArr.forEach(key => {
-      body.addEventListener(key, (e) => {
+      body.addEventListener(key, () => {
         body.removeEventListener(toBind.move, this.move)
         this.destroy()
         if (this.callBack.end != null) {
@@ -123,13 +123,13 @@ class Joystick {
 
   destroy = (): void => {
     if (this.currentJoystick.build) {
+      this.currentJoystick.build = false
       this.currentJoystick.front!.style.transform = 'translate(0px, 0px)'
       this.currentJoystick.ui!.style.opacity = '0'
 
       setTimeout(() => {
         this.currentJoystick.ui!.remove()
-        this.currentJoystick.build = false
-      }, 400)
+      }, 100)
     }
   }
 
