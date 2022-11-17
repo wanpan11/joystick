@@ -15,3 +15,15 @@ interface JoystickObj {
   y: number
   build: boolean
 }
+
+interface CreateConfig {
+  zone: string
+  size: number
+}
+
+interface Joystick {
+  joystickSize: number
+  currentJoystick: JoystickObj
+  create: (config: CreateConfig) => void
+  move: (e: MouseEvent) => void
+}
