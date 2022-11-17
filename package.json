@@ -2,7 +2,7 @@
   "name": "joystick-kit",
   "version": "1.0.0",
   "description": "🎮 Virtual joystick 虚拟摇杆",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/wanpan11/joystick"
