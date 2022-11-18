@@ -10,11 +10,29 @@ export const radian = (curPos: Position, startPos: Position): number => {
 
   return Math.atan2(dy, dx)
 }
+export const angle = (radian: number): number => {
+  return radian * 180 / Math.PI
+}
 export const findCoord = (d: number, a: number): Position => {
   const b = { x: 0, y: 0 }
   b.x = -(d * Math.cos(a))
   b.y = -(d * Math.sin(a))
   return b
+}
+export const getDirection = (ang: number): string => {
+  let direction = ''
+
+  if (ang > 45 && ang < 135) {
+    direction = 'up'
+  } else if (ang > 135 && ang < 225) {
+    direction = 'right'
+  } else if (ang > 225 && ang < 315) {
+    direction = 'down'
+  } else {
+    direction = 'left'
+  }
+
+  return direction
 }
 
 /* 构建dom */

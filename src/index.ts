@@ -1,4 +1,11 @@
-import { distance, radian, findCoord, buildDom } from './util'
+import {
+  distance,
+  radian,
+  findCoord,
+  buildDom,
+  angle,
+  getDirection
+} from './util'
 
 /* 区分事件 */
 const isTouch = !!('ontouchstart' in window)
@@ -23,6 +30,8 @@ if (isTouch) {
 
 class Joystick {
   joystickSize = 0
+  color = { back: '', front: '' }
+  backImg = { back: '', front: '' }
   callBack: EventObj = {
     start: null,
     move: null,
@@ -37,9 +46,6 @@ class Joystick {
     y: 0,
     build: false
   }
-
-  color = { back: '', front: '' }
-  backImg = { back: '', front: '' }
 
   create = (config: CreateConfig): void => {
     const { zone = '', size = 80, color, backImg } = config
@@ -74,22 +80,26 @@ class Joystick {
         this.currentJoystick.y = clientY
       }
 
+      if (this.currentJoystick.build) {
+        this.currentJoystick.ui!.remove()
+      }
+
       buildDom(this, zoneNode)
 
       body.addEventListener(toBind.move, this.move, { passive: false })
 
       if (this.callBack.start != null) {
-        this.callBack.start()
+        this.callBack.start(e, this)
       }
     })
 
     const endArr = toBind.end.split(',')
     endArr.forEach(key => {
-      body.addEventListener(key, () => {
+      body.addEventListener(key, e => {
         body.removeEventListener(toBind.move, this.move)
         this.destroy()
         if (this.callBack.end != null) {
-          this.callBack.end()
+          this.callBack.end(e, this)
         }
       })
     })
@@ -115,6 +125,8 @@ class Joystick {
     const dist = distance(currentPos, this.currentJoystick)
     /* 获取原点夹角 弧度 */
     const rad = radian(currentPos, this.currentJoystick)
+    /* 获取原点夹角 角度 */
+    const ang = angle(rad)
 
     /* 限制最大距离 */
     const clampedDist = Math.min(dist, r)
@@ -124,7 +136,8 @@ class Joystick {
     this.currentJoystick.front!.style.transform = `translate(${clampedPos.x}px,${clampedPos.y}px)`
 
     if (this.callBack.move != null) {
-      this.callBack.move()
+      const ang2 = ang < 0 ? ang + 360 : ang
+      this.callBack.move(e, { direction: getDirection(ang2), ang: ang2 })
     }
 
     e.preventDefault()
@@ -132,11 +145,11 @@ class Joystick {
 
   destroy = (): void => {
     if (this.currentJoystick.build) {
-      this.currentJoystick.build = false
       this.currentJoystick.front!.style.transform = 'translate(0px, 0px)'
       this.currentJoystick.ui!.style.opacity = '0'
 
       setTimeout(() => {
+        this.currentJoystick.build = false
         this.currentJoystick.ui!.remove()
       }, 100)
     }

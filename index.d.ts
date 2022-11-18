@@ -8,9 +8,9 @@ interface StyleObj {
 }
 
 interface EventObj {
-  start: null | (() => void)
-  move: null | (() => void)
-  end: null | (() => void)
+  start: null | ((Event, Joystick) => void)
+  move: null | ((Event, { direction: string, ang: number }) => void)
+  end: null | ((Event, Joystick) => void)
 }
 
 interface JoystickObj {
