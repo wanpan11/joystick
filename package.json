@@ -1,6 +1,6 @@
 {
   "name": "joystick-kit",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "🎮 Virtual joystick 虚拟摇杆",
   "main": "dist/index.js",
   "repository": {
