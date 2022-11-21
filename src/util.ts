@@ -43,7 +43,11 @@ export const appleStyle = (node: HTMLElement, style: StyleObj): void => {
   })
 }
 export const buildDom = (instance: Joystick, zone: HTMLElement): void => {
-  const { currentJoystick, joystickSize, color, backImg } = instance
+  const { mode, currentJoystick, joystickSize, position, color, backImg } = instance
+
+  if (mode === 'static') {
+    zone.style.position = 'relative'
+  }
 
   const ui = document.createElement('div')
   const back = document.createElement('div')
@@ -57,10 +61,12 @@ export const buildDom = (instance: Joystick, zone: HTMLElement): void => {
   front.setAttribute('class', 'front')
 
   const uiStyle: StyleObj = {
-    position: 'fixed',
-    top: `${currentJoystick.y - joystickSize / 2}px`,
-    left: `${currentJoystick.x - joystickSize / 2}px`,
-    opacity: '1',
+    position: 'absolute',
+    top: mode === 'static' ? position.top : `${currentJoystick.y - joystickSize / 2}px`,
+    left: mode === 'static' ? position.left : `${currentJoystick.x - joystickSize / 2}px`,
+    right: position.right,
+    bottom: position.bottom,
+    opacity: mode === 'static' ? '0.5' : '1',
     transition: 'opacity 100ms'
   }
   const backStyle: StyleObj = {

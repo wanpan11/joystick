@@ -29,6 +29,8 @@ if (isTouch) {
 }
 
 class Joystick {
+  mode = 'dynamic'
+  position = { top: '100px', left: '100px', right: '', bottom: '' }
   joystickSize = 0
   color = { back: '', front: '' }
   backImg = { back: '', front: '' }
@@ -48,20 +50,30 @@ class Joystick {
   }
 
   create = (config: CreateConfig): void => {
-    const { zone = '', size = 80, color, backImg } = config
+    const { mode = 'dynamic', zone = '', size = 80, position = { top: '100px', left: '100px', right: '', bottom: '' }, color, backImg } = config
     const zoneNode = document.getElementById(zone)
 
     if (zone === '' || zoneNode === null) {
       throw new Error('zoneNode is empty!')
     } else {
+      this.mode = mode
+      this.joystickSize = size
+      this.position = position
+
       if (color !== undefined) {
         this.color = color
       }
       if (backImg !== undefined) {
         this.backImg = backImg
       }
-      this.joystickSize = size
-      this.initListener(zoneNode)
+
+      let startDom = zoneNode
+      if (this.mode === 'static') {
+        buildDom(this, zoneNode)
+        startDom = this.currentJoystick.ui as HTMLElement
+      }
+
+      this.initListener(startDom)
     }
   }
 
@@ -80,11 +92,15 @@ class Joystick {
         this.currentJoystick.y = clientY
       }
 
-      if (this.currentJoystick.build) {
+      if (this.currentJoystick.build && this.mode === 'dynamic') {
         this.currentJoystick.ui!.remove()
       }
 
-      buildDom(this, zoneNode)
+      if (this.mode === 'dynamic') {
+        buildDom(this, zoneNode)
+      } else {
+        this.currentJoystick.ui!.style.opacity = '1'
+      }
 
       body.addEventListener(toBind.move, this.move, { passive: false })
 
@@ -98,6 +114,7 @@ class Joystick {
       body.addEventListener(key, e => {
         body.removeEventListener(toBind.move, this.move)
         this.destroy()
+
         if (this.callBack.end != null) {
           this.callBack.end(e, this)
         }
@@ -146,12 +163,17 @@ class Joystick {
   destroy = (): void => {
     if (this.currentJoystick.build) {
       this.currentJoystick.front!.style.transform = 'translate(0px, 0px)'
-      this.currentJoystick.ui!.style.opacity = '0'
 
-      setTimeout(() => {
-        this.currentJoystick.build = false
-        this.currentJoystick.ui!.remove()
-      }, 100)
+      if (this.mode === 'dynamic') {
+        this.currentJoystick.ui!.style.opacity = '0'
+
+        setTimeout(() => {
+          this.currentJoystick.build = false
+          this.currentJoystick.ui!.remove()
+        }, 100)
+      } else {
+        this.currentJoystick.ui!.style.opacity = '0.5'
+      }
     }
   }
 

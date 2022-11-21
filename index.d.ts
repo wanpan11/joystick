@@ -28,13 +28,17 @@ interface JoystickObj {
 }
 
 interface CreateConfig {
+  mode: string
   zone: string
   size?: number
+  position: { top: string, left: string, right: string, bottom: string }
   color?: { back: string, front: string }
   backImg?: { back: string, front: string }
 }
 
 interface Joystick {
+  mode: string
+  position: { top: string, left: string, right: string, bottom: string }
   joystickSize: number
   callBack: EventObj
   currentJoystick: JoystickObj
