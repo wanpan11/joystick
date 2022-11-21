@@ -33,8 +33,10 @@ joystick.on("start", () => {
 
 ```typescript
 interface CreateConfig {
+  mode: string; // 挂载模式 static | dynamic
   zone: string; // 挂载节点
   size?: number; // 摇杆大小
+  position: { top: string; left: string; right: string; bottom: string }; //组件定位 dynamic 模式下无效
   color?: { back: string; front: string }; // 摇杆颜色
   backImg?: { back: string; front: string }; // 摇杆背景图
 }
@@ -65,4 +67,5 @@ interface EventObj {
   end: null | ((Event, Joystick) => void);
 }
 ```
+
 <a href='./index.d.ts'>类型参考</a>
