@@ -1,6 +1,9 @@
-# joystick
+# joystick 虚拟摇杆 
 
 🎮 Virtual joystick 虚拟摇杆
+
+![image](https://github.com/wanpan11/joystick/assets/38714194/67e937a2-92c6-4964-98f8-425d1010ffcc)
+
 
 ---
 
