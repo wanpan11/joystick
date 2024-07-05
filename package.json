@@ -1,6 +1,6 @@
 {
   "name": "joystick-kit",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A react library developed with dumi",
   "license": "MIT",
   "module": "dist/index.js",
