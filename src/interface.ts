@@ -1,6 +1,6 @@
-export type DynamicMode = "dynamic" | "static";
+export type DynamicMode = 'dynamic' | 'static';
 
-export type DirectionType = "up" | "right" | "down" | "left";
+export type DirectionType = 'up' | 'right' | 'down' | 'left';
 
 export interface JoystickObj {
   ui?: HTMLElement;
@@ -17,11 +17,11 @@ export interface CreateConfig {
   size?: number;
   color?: { back: string; front: string };
   backImg?: { back: string; front: string };
-  position: {
-    top: string | number;
-    left: string | number;
-    right: string | number;
-    bottom: string | number;
+  position?: {
+    top?: string | number;
+    left?: string | number;
+    right?: string | number;
+    bottom?: string | number;
   };
 }
 
