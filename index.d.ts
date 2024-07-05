@@ -1,58 +1,21 @@
-interface Position {
-  x: number
-  y: number
+// module
+declare module '*.module.scss' {
+  const classes: { [key: string]: string };
+  export default classes;
 }
-
-interface StyleObj {
-  [key: string]: string
+declare module '*.module.less' {
+  const classes: { [key: string]: string };
+  export default classes;
 }
-
-interface EventObj {
-  start: null | ((Event, Joystick) => void)
-  move: null | ((Event, { direction, ang }: MoveInfo) => void)
-  end: null | ((Event, Joystick) => void)
+declare module '*.jpg' {
+  const classes: string;
+  export default classes;
 }
-
-interface MoveInfo {
-  direction: string
-  ang: number
+declare module '*.svg' {
+  const classes: string;
+  export default classes;
 }
-
-interface JoystickObj {
-  ui: null | HTMLElement
-  back: null | HTMLElement
-  front: null | HTMLElement
-  x: number
-  y: number
-  build: boolean
+declare module '*.png' {
+  const classes: string;
+  export default classes;
 }
-
-interface CreateConfig {
-  mode: string
-  zone: string
-  size?: number
-  position: { top: string, left: string, right: string, bottom: string }
-  color?: { back: string, front: string }
-  backImg?: { back: string, front: string }
-}
-
-interface Joystick {
-  mode: string
-  position: { top: string, left: string, right: string, bottom: string }
-  joystickSize: number
-  callBack: EventObj
-  currentJoystick: JoystickObj
-  color: { back: string, front: string }
-  backImg: { back: string, front: string }
-  create: (config: CreateConfig) => void
-  initListener: (zoneNode: HTMLElement) => void
-  move: (e: Event) => void
-  destroy: () => void
-  on: (type: string, cb: () => void) => void
-}
-
-interface EventType {
-  start: string
-  move: string
-  end: string
-};
