@@ -11,4 +11,5 @@ export default defineConfig({
     'joystick-kit': path.join(__dirname, 'src'),
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/joystick/' : '',
+  base: process.env.NODE_ENV === 'production' ? '/joystick/' : '',
 });
