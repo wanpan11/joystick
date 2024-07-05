@@ -44,6 +44,9 @@
       "prettier --parser=typescript --write"
     ]
   },
+  "dependencies": {
+    "@babel/runtime": "^7.24.7"
+  },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
