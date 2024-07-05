@@ -16,9 +16,9 @@ joystick.on('start', () => {
   console.log('start ===> ')
 })
 
-// joystick.on('move', (e, i) => {
-//   console.log('move ===> ', i)
-// })
+joystick.on('move', (e, i) => {
+  console.log('move ===> ', i)
+})
 
 joystick.on('end', (e, i) => {
   console.log('end ===> ', i)
