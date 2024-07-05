@@ -1,5 +1,7 @@
 import Joystick from 'joystick-kit';
 import React, { useEffect } from 'react';
+import back from '../../public/img/joystick_back.png';
+import front from '../../public/img/joystick_frontPressed.png';
 
 export default function Demo() {
   useEffect(() => {
@@ -10,8 +12,8 @@ export default function Demo() {
       size: 120,
       position: { top: 'calc(50% - 60px)', left: 'calc(50% - 60px)' },
       backImg: {
-        back: '/img/joystick_back.png',
-        front: '/img/joystick_frontPressed.png',
+        back: back,
+        front: front,
       },
     });
 

@@ -12,5 +12,5 @@
       "joystick-kit/*": ["src/*", "*"]
     }
   },
-  "include": [".dumirc.ts", "src/**/*", "docs/**/*"]
+  "include": [".dumirc.ts", "src/**/*", "docs/**/*", "./index.d.ts"]
 }
