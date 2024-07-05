@@ -10,4 +10,5 @@ export default defineConfig({
   alias: {
     'joystick-kit': path.join(__dirname, 'src'),
   },
+  publicPath: process.env.NODE_ENV === 'production' ? '/joystick/' : '',
 });
