@@ -1,13 +1,19 @@
 {
   "name": "joystick-kit",
   "version": "2.0.1",
-  "description": "A react library developed with dumi",
+  "description": "🎮 Virtual joystick | 虚拟摇杆 游戏手柄",
   "keywords": [
+    "game-controls",
     "joystick",
     "虚拟手柄",
     "摇杆"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wanpan11/joystick.git"
+  },
   "license": "MIT",
+  "author": "wanp11",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
