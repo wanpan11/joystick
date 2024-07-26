@@ -43,6 +43,7 @@ type CallBack = (
 ) => void;
 
 class Joystick {
+  private container: HTMLElement | null = null;
   private mode: JoystickInstance['mode'] = 'dynamic';
   private joystickSize: JoystickInstance['size'] = 0;
   private color: JoystickInstance['color'] = { back: '', front: '' };
@@ -100,16 +101,17 @@ class Joystick {
         startDom = this.currentJoystick.ui as HTMLElement;
       }
 
-      this.initListener(startDom);
+      this.container = startDom;
+      this.initListener();
     }
   };
 
-  private buildDom = (instance: Joystick, zone: HTMLElement): void => {
+  private buildDom = (instance: Joystick, container: HTMLElement): void => {
     const { mode, currentJoystick, joystickSize, position, color, backImg } =
       instance;
 
     if (mode === 'static') {
-      zone.style.position = 'relative';
+      container.style.position = 'relative';
     }
 
     const ui = document.createElement('div');
@@ -176,51 +178,53 @@ class Joystick {
     appleStyle(front, frontStyle);
 
     ui.append(back, front);
-    zone.appendChild(ui);
+    container.appendChild(ui);
     currentJoystick.build = true;
   };
 
-  private initListener = (zoneNode: HTMLElement): void => {
-    const body = document.getElementsByTagName('body')[0];
+  private initListener = (): void => {
+    if (this.container) {
+      this.container.addEventListener(toBind.start, this.moverStart);
 
-    /* 监听 */
-    zoneNode.addEventListener(toBind.start, (e) => {
-      e.preventDefault?.();
-
-      if (e.type === 'touchstart') {
-        const { clientX, clientY } = (e as TouchEvent).changedTouches[0];
-        this.currentJoystick.x = clientX;
-        this.currentJoystick.y = clientY;
-      } else {
-        const { clientX, clientY } = e as MouseEvent;
-        this.currentJoystick.x = clientX;
-        this.currentJoystick.y = clientY;
-      }
-
-      if (this.currentJoystick.build && this.mode === 'dynamic') {
-        this.currentJoystick.ui!.remove();
-      }
-
-      if (this.mode === 'dynamic') {
-        this.buildDom(this, zoneNode);
-      } else {
-        this.currentJoystick.ui!.style.opacity = '1';
-      }
-
-      body.addEventListener(toBind.move, this.move);
-
-      this.callBack.start?.(e);
-    });
-
-    const endArr = toBind.end.split(',');
-    endArr.forEach((key) => {
-      body.addEventListener(key, (e) => {
-        body.removeEventListener(toBind.move, this.move);
-        this.reset();
-
-        this.callBack.end?.(e);
+      const endArr = toBind.end.split(',');
+      endArr.forEach((key) => {
+        window.addEventListener(key, this.moverEnd);
       });
-    });
+    }
+  };
+
+  private moverStart = (e: Event): void => {
+    e.preventDefault?.();
+
+    if (e.type === 'touchstart') {
+      const { clientX, clientY } = (e as TouchEvent).changedTouches[0];
+      this.currentJoystick.x = clientX;
+      this.currentJoystick.y = clientY;
+    } else {
+      const { clientX, clientY } = e as MouseEvent;
+      this.currentJoystick.x = clientX;
+      this.currentJoystick.y = clientY;
+    }
+
+    if (this.currentJoystick.build && this.mode === 'dynamic') {
+      this.currentJoystick.ui!.remove();
+    }
+
+    if (this.mode === 'dynamic' && this.container) {
+      this.buildDom(this, this.container);
+    } else {
+      this.currentJoystick.ui!.style.opacity = '1';
+    }
+
+    window.addEventListener(toBind.move, this.move);
+
+    this.callBack.start?.(e);
+  };
+
+  private moverEnd = (e: Event): void => {
+    window.removeEventListener(toBind.move, this.move);
+    this.reset();
+    this.callBack.end?.(e);
   };
 
   private move = (e: Event): void => {
@@ -279,9 +283,18 @@ class Joystick {
   };
 
   public destroy = (): void => {
-    if (this.currentJoystick.build) {
+    if (this.currentJoystick.build && this.container) {
       this.currentJoystick.ui!.remove();
       this.currentJoystick.build = false;
+
+      this.container.removeEventListener(toBind.start, this.moverStart);
+
+      const endArr = toBind.end.split(',');
+      endArr.forEach((key) => {
+        window.addEventListener(key, this.moverEnd);
+      });
+
+      this.container = null;
     }
   };
 
