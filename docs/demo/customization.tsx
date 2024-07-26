@@ -21,6 +21,10 @@ export default function Demo() {
       console.log(e);
       console.log(info);
     });
+
+    return () => {
+      joystick.destroy();
+    };
   }, []);
 
   return (

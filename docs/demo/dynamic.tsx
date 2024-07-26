@@ -5,6 +5,10 @@ export default function Demo() {
   useEffect(() => {
     const joystick = new Joystick();
     joystick.create({ mode: 'dynamic', zone: 'joystick' });
+
+    return () => {
+      joystick.destroy();
+    };
   }, []);
 
   return (

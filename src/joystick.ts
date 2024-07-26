@@ -124,7 +124,7 @@ class Joystick {
     front.setAttribute('class', 'front');
 
     const uiStyle: CSS.Properties<string | number> = {
-      position: 'absolute',
+      position: mode === 'static' ? 'absolute' : 'fixed',
       top:
         mode === 'static'
           ? position.top
@@ -216,7 +216,7 @@ class Joystick {
     endArr.forEach((key) => {
       body.addEventListener(key, (e) => {
         body.removeEventListener(toBind.move, this.move);
-        this.destroy();
+        this.reset();
 
         this.callBack.end?.(e);
       });
@@ -261,7 +261,7 @@ class Joystick {
     e.preventDefault();
   };
 
-  private destroy = (): void => {
+  private reset = (): void => {
     if (this.currentJoystick.build) {
       this.currentJoystick.front!.style.transform = 'translate(0px, 0px)';
 
@@ -271,10 +271,17 @@ class Joystick {
         setTimeout(() => {
           this.currentJoystick.build = false;
           this.currentJoystick.ui!.remove();
-        }, 100);
+        }, 50);
       } else {
         this.currentJoystick.ui!.style.opacity = '0.5';
       }
+    }
+  };
+
+  public destroy = (): void => {
+    if (this.currentJoystick.build) {
+      this.currentJoystick.ui!.remove();
+      this.currentJoystick.build = false;
     }
   };
 
